@@ -10,15 +10,21 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.syntaxplayground.foodtruckr.R;
+import com.syntaxplayground.foodtruckr.model.Foodtruck;
 
 public class FoodtruckDetailActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private Foodtruck foodtruck;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_foodtruck_detail);
+        setContentView(R.layout.detail_view);
+
+        foodtruck = getIntent().getParcelableExtra(FoodtrucksListActivity.EXTRA_ITEM_FOODTRUCK);
+        System.out.println(foodtruck.getName());
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);

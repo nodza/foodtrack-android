@@ -32,6 +32,7 @@ public class FoodtrucksListActivity extends AppCompatActivity {
     private FoodtruckAdapter adapter;
     private ArrayList<Foodtruck> foodtrucks = new ArrayList<>();
     private static FoodtrucksListActivity foodtrucksListActivity;
+    public static final String EXTRA_ITEM_FOODTRUCK = "FOODTRUCK";
 
     public static FoodtrucksListActivity getFoodtrucksListActivity() {
         return foodtrucksListActivity;
@@ -76,8 +77,9 @@ public class FoodtrucksListActivity extends AppCompatActivity {
         void success(Boolean success);
     }
 
-    public void loadFoodtruckDetailActivity() {
+    public void loadFoodtruckDetailActivity(Foodtruck foodtruck) {
         Intent intent = new Intent(FoodtrucksListActivity.this, FoodtruckDetailActivity.class);
+        intent.putExtra(FoodtrucksListActivity.EXTRA_ITEM_FOODTRUCK, foodtruck);
         startActivity(intent);
     }
 }
