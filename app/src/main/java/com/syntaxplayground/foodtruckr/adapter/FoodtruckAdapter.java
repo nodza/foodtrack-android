@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.syntaxplayground.foodtruckr.R;
+import com.syntaxplayground.foodtruckr.activities.FoodtrucksListActivity;
 import com.syntaxplayground.foodtruckr.holder.FoodtruckHolder;
 import com.syntaxplayground.foodtruckr.model.Foodtruck;
 
@@ -28,6 +29,13 @@ public class FoodtruckAdapter extends RecyclerView.Adapter<FoodtruckHolder>{
 
         final Foodtruck foodtruck = foodtrucks.get(position);
         holder.updateUI(foodtruck);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FoodtrucksListActivity.getFoodtrucksListActivity().loadFoodtruckDetailActivity();
+            }
+        });
 
     }
 

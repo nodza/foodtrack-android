@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">Foodtruckr</string>
+    <string name="app_name">Foodtrack</string>
+    <string name="title_activity_foodtruck_detail">Map</string>
 </resources>

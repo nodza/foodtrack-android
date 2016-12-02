@@ -1,10 +1,12 @@
 package com.syntaxplayground.foodtruckr.activities;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.IntProperty;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -29,11 +31,22 @@ public class FoodtrucksListActivity extends AppCompatActivity {
     // Variables
     private FoodtruckAdapter adapter;
     private ArrayList<Foodtruck> foodtrucks = new ArrayList<>();
+    private static FoodtrucksListActivity foodtrucksListActivity;
+
+    public static FoodtrucksListActivity getFoodtrucksListActivity() {
+        return foodtrucksListActivity;
+    }
+
+    public static void setFoodtrucksListActivity(FoodtrucksListActivity foodtrucksListActivity) {
+        FoodtrucksListActivity.foodtrucksListActivity = foodtrucksListActivity;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_foodtrucks_list);
+
+        foodtrucksListActivity.setFoodtrucksListActivity(this);
 
         TrucksDownloaded listener = new TrucksDownloaded() {
             @Override
@@ -61,5 +74,10 @@ public class FoodtrucksListActivity extends AppCompatActivity {
 
     public interface TrucksDownloaded {
         void success(Boolean success);
+    }
+
+    public void loadFoodtruckDetailActivity() {
+        Intent intent = new Intent(FoodtrucksListActivity.this, FoodtruckDetailActivity.class);
+        startActivity(intent);
     }
 }
