@@ -9,6 +9,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.syntaxplayground.foodtruckr.activities.FoodtrucksListActivity;
+import com.syntaxplayground.foodtruckr.constants.Constants;
 import com.syntaxplayground.foodtruckr.model.Foodtruck;
 
 import org.json.JSONArray;
@@ -36,7 +37,7 @@ public class DataService {
     // Request all foodtrucks
     public ArrayList<Foodtruck> downloadAllFoodtrucks(Context context, final FoodtrucksListActivity.TrucksDownloaded listener) {
 
-        String url = "http://10.0.2.2:3005/api/v1/foodtruck";
+        String url = Constants.GET_FOODTRUCKS_URL;
         final ArrayList<Foodtruck> foodtruckList = new ArrayList<>();
 
         final JsonArrayRequest getTrucks = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
