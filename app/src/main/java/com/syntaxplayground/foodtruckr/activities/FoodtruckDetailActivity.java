@@ -1,7 +1,10 @@
 package com.syntaxplayground.foodtruckr.activities;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -20,6 +23,11 @@ public class FoodtruckDetailActivity extends FragmentActivity implements OnMapRe
     private TextView foodtruckName;
     private TextView foodType;
     private TextView avgCost;
+    private Button addReviewBtn;
+    private Button viewReviewsBtn;
+    private Button modifyFoodtruckBtn;
+
+    public static final String EXTRA_ITEM_FOODTRUCK = "FOODTRUCK";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +38,11 @@ public class FoodtruckDetailActivity extends FragmentActivity implements OnMapRe
         foodType = (TextView) findViewById(R.id.detail_food_type);
         avgCost = (TextView) findViewById(R.id.detail_food_cost);
 
+        addReviewBtn = (Button) findViewById(R.id.add_review_btn);
+        viewReviewsBtn = (Button) findViewById(R.id.view_reviews_btn);
+        modifyFoodtruckBtn = (Button) findViewById(R.id.modify_foodtruck_btn);
+
+
         foodtruck = getIntent().getParcelableExtra(FoodtrucksListActivity.EXTRA_ITEM_FOODTRUCK);
         updateUI();
 
@@ -37,6 +50,14 @@ public class FoodtruckDetailActivity extends FragmentActivity implements OnMapRe
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        viewReviewsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                loadFoodtruckReviewsActivity(foodtruck);
+            }
+        });
+
     }
 
     @Override
@@ -62,5 +83,11 @@ public class FoodtruckDetailActivity extends FragmentActivity implements OnMapRe
         foodtruckName.setText(foodtruck.getName());
         foodType.setText(foodtruck.getFoodType());
         avgCost.setText("$" + Double.toString(foodtruck.getAvgCost()));
+    }
+
+    public void loadFoodtruckReviewsActivity(Foodtruck foodtruck) {
+        Intent intent = new Intent(FoodtruckDetailActivity.this, FoodtruckReviewsActivity.class);
+        intent.putExtra(FoodtruckDetailActivity.EXTRA_ITEM_FOODTRUCK, foodtruck);
+        startActivity(intent);
     }
 }

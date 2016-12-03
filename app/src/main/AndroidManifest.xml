@@ -38,7 +38,8 @@
 
         <activity
             android:name=".activities.FoodtruckDetailActivity"
-            android:label="@string/title_activity_foodtruck_detail"></activity>
+            android:label="@string/title_activity_foodtruck_detail" />
+        <activity android:name=".activities.FoodtruckReviewsActivity"></activity>
     </application>
 
 </manifest>

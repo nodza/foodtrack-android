@@ -8,9 +8,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.syntaxplayground.foodtruckr.activities.FoodtruckReviewsActivity;
 import com.syntaxplayground.foodtruckr.activities.FoodtrucksListActivity;
 import com.syntaxplayground.foodtruckr.constants.Constants;
 import com.syntaxplayground.foodtruckr.model.Foodtruck;
+import com.syntaxplayground.foodtruckr.model.FoodtruckReview;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -81,5 +83,47 @@ public class DataService {
 
         Volley.newRequestQueue(context).add(getTrucks);
         return foodtruckList;
+    }
+
+    // Request all foodtrucks reviews
+    public ArrayList<FoodtruckReview> downloadAllReviews(Context context, Foodtruck foodtruck, final FoodtruckReviewsActivity.ReviewInterface listener) {
+
+        String url = Constants.GET_FOODTRUCK_REVIEWS + foodtruck.getId();
+        final ArrayList<FoodtruckReview> foodtruckReviewList = new ArrayList<>();
+
+        final JsonArrayRequest getReviews = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                System.out.println(response.toString());
+
+                try {
+                    JSONArray foodtruckReviews = response;
+                    for (int x = 0; x < foodtruckReviews.length(); x++) {
+                        JSONObject foodtruckReview = foodtruckReviews.getJSONObject(x);
+
+                        String id = foodtruckReview.getString("_id");
+                        String title = foodtruckReview.getString("title");
+                        String text = foodtruckReview.getString("text");
+
+                        FoodtruckReview newFoodtruckReview = new FoodtruckReview(id, title, text);
+                        foodtruckReviewList.add(newFoodtruckReview);
+
+                    }
+                } catch (JSONException e) {
+                    Log.v("JSON", "EXC" + e.getLocalizedMessage());
+                }
+
+                listener.success(true);
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.v("API", "Err" + error.getLocalizedMessage());
+            }
+        });
+
+        Volley.newRequestQueue(context).add(getReviews);
+        return foodtruckReviewList;
     }
 }
