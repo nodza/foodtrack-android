@@ -58,6 +58,13 @@ public class FoodtruckDetailActivity extends FragmentActivity implements OnMapRe
             }
         });
 
+        addReviewBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                loadLogin();
+            }
+        });
+
     }
 
     @Override
@@ -88,6 +95,11 @@ public class FoodtruckDetailActivity extends FragmentActivity implements OnMapRe
     public void loadFoodtruckReviewsActivity(Foodtruck foodtruck) {
         Intent intent = new Intent(FoodtruckDetailActivity.this, FoodtruckReviewsActivity.class);
         intent.putExtra(FoodtruckDetailActivity.EXTRA_ITEM_FOODTRUCK, foodtruck);
+        startActivity(intent);
+    }
+
+    public void loadLogin() {
+        Intent intent = new Intent(FoodtruckDetailActivity.this, LoginActivity.class);
         startActivity(intent);
     }
 }
