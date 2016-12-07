@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.syntaxplayground.foodtruckr.R;
+import com.syntaxplayground.foodtruckr.data.AuthService;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -122,7 +123,20 @@ public class LoginActivity extends AppCompatActivity {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
+
+            RegisterInterface registerInterface = new RegisterInterface() {
+                @Override
+                public void success(Boolean success) {
+
+                }
+            };
+
+            AuthService.getInstance().registerUser(email, password, getBaseContext(), registerInterface);
         }
+    }
+
+    public interface RegisterInterface {
+        void success(Boolean success);
     }
 
     private boolean isEmailValid(String email) {
