@@ -3,7 +3,10 @@ package com.syntaxplayground.foodtruckr.activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -33,6 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.syntaxplayground.foodtruckr.R;
+import com.syntaxplayground.foodtruckr.constants.Constants;
 import com.syntaxplayground.foodtruckr.data.AuthService;
 
 import static android.Manifest.permission.READ_CONTACTS;
@@ -47,11 +51,17 @@ public class LoginActivity extends AppCompatActivity {
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private String authToken;
+    private Boolean isLoggeIn = false;
+    SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
 
@@ -91,8 +101,8 @@ public class LoginActivity extends AppCompatActivity {
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
-        String password = mPasswordView.getText().toString();
+        final String email = mEmailView.getText().toString();
+        final String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
@@ -124,10 +134,23 @@ public class LoginActivity extends AppCompatActivity {
             // perform the user login attempt.
             showProgress(true);
 
+            final LoginInterface loginInterface = new LoginInterface() {
+                @Override
+                public void success(Boolean success) {
+                    if (success) {
+                        authToken = AuthService.getInstance().getAuthToken();
+                        isLoggeIn = true;
+                        prefs.edit().putString(Constants.AUTH_TOKEN, authToken).apply();
+                        prefs.edit().putBoolean(Constants.IS_LOGGED_IN, true).apply();
+                        finish();
+                    }
+                }
+            };
+
             RegisterInterface registerInterface = new RegisterInterface() {
                 @Override
                 public void success(Boolean success) {
-
+                    AuthService.getInstance().loginUser(email, password, getBaseContext(), loginInterface);
                 }
             };
 
@@ -136,6 +159,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public interface RegisterInterface {
+        void success(Boolean success);
+    }
+
+    public interface LoginInterface {
         void success(Boolean success);
     }
 
