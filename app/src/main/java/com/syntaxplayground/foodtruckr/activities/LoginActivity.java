@@ -52,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
     private View mProgressView;
     private View mLoginFormView;
     private String authToken;
-    private Boolean isLoggeIn = false;
+    private boolean isLoggedIn = false;
     SharedPreferences prefs;
 
     @Override
@@ -139,7 +139,7 @@ public class LoginActivity extends AppCompatActivity {
                 public void success(Boolean success) {
                     if (success) {
                         authToken = AuthService.getInstance().getAuthToken();
-                        isLoggeIn = true;
+                        isLoggedIn = true;
                         prefs.edit().putString(Constants.AUTH_TOKEN, authToken).apply();
                         prefs.edit().putBoolean(Constants.IS_LOGGED_IN, true).apply();
                         finish();
