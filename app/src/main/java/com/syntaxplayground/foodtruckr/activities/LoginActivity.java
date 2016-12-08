@@ -60,10 +60,9 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {

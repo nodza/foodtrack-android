@@ -43,11 +43,12 @@ public class AuthService {
         return authToken;
     }
 
+    // Register user
     public void registerUser(String email, String password, Context context, final LoginActivity.RegisterInterface listener) {
 
         try {
 
-            String url = Constants.ACCOUNT_REGISTER_URL;
+            String url = Constants.REGISTER;
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("email", email);
             jsonBody.put("password", password);
@@ -64,7 +65,6 @@ public class AuthService {
                     if (error.networkResponse.statusCode == 409) {
                         listener.success(true);
                     }
-
                 }
             }) {
                 @Override
@@ -76,7 +76,7 @@ public class AuthService {
                 public byte[] getBody() throws AuthFailureError {
                     try {
                         return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
-                    } catch (UnsupportedEncodingException uee) {
+                    } catch (UnsupportedEncodingException uee){
                         VolleyLog.wtf("Unsupported Encoding", mRequestBody, "utf-8");
                         return null;
                     }
@@ -97,13 +97,15 @@ public class AuthService {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
     }
 
+    // Login user
     public void loginUser(String email, String password, Context context, final LoginActivity.LoginInterface listener) {
 
         try {
 
-            String url = Constants.ACCOUNT_LOGIN_URL;
+            String url = Constants.LOGIN;
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("email", email);
             jsonBody.put("password", password);
@@ -112,17 +114,16 @@ public class AuthService {
             JsonObjectRequest loginRequest = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-
                     Log.i("Volley", response.toString());
 
                     try {
                         JSONObject account = response;
                         authToken = account.getString("token");
+                        listener.success(true);
 
                     } catch (JSONException e) {
                         Log.v("JSON", "EXC" + e.getLocalizedMessage());
                     }
-
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -139,7 +140,7 @@ public class AuthService {
                 public byte[] getBody() {
                     try {
                         return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
-                    } catch (UnsupportedEncodingException uee) {
+                    } catch (UnsupportedEncodingException uee){
                         VolleyLog.wtf("Unsupported Encoding", mRequestBody, "utf-8");
                         return null;
                     }
@@ -147,8 +148,8 @@ public class AuthService {
 
                 @Override
                 protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
-                    if (response.statusCode == 200) {
-                        listener.success(true);
+                    if (response.statusCode != 200) {
+                        listener.success(false);
                     }
 
                     return super.parseNetworkResponse(response);
@@ -162,4 +163,5 @@ public class AuthService {
         }
 
     }
+
 }

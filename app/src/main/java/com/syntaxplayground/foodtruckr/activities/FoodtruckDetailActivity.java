@@ -99,15 +99,16 @@ public class FoodtruckDetailActivity extends FragmentActivity implements OnMapRe
         avgCost.setText("$" + Double.toString(foodtruck.getAvgCost()));
     }
 
-    public void loadFoodtruckReviewsActivity(Foodtruck foodtruck) {
+    public void loadFoodtruckReviewsActivity(Foodtruck truck) {
         Intent intent = new Intent(FoodtruckDetailActivity.this, FoodtruckReviewsActivity.class);
-        intent.putExtra(FoodtruckDetailActivity.EXTRA_ITEM_FOODTRUCK, foodtruck);
+        intent.putExtra(FoodtruckDetailActivity.EXTRA_ITEM_FOODTRUCK, truck);
         startActivity(intent);
     }
 
     public void loadAddReview() {
         if (prefs.getBoolean(Constants.IS_LOGGED_IN, false)) {
             Intent intent = new Intent(FoodtruckDetailActivity.this, AddReviewActivity.class);
+            intent.putExtra(FoodtruckDetailActivity.EXTRA_ITEM_FOODTRUCK, foodtruck);
             startActivity(intent);
         } else {
             Intent intent = new Intent(FoodtruckDetailActivity.this, LoginActivity.class);
