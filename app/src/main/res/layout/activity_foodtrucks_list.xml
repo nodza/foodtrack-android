@@ -1,10 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_foodtrucks_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.syntaxplayground.foodtruckr.activities.FoodtrucksListActivity">
 
-    <include layout="@layout/recycler_foodtruck"></include>
-</RelativeLayout>
+    <include layout="@layout/recycler_foodtruck"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/include2"></include>
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:fabSize="normal"
+        app:srcCompat="@android:drawable/ic_input_add"
+        android:id="@+id/addFoodtruckFAB"
+        app:backgroundTint="?attr/colorButtonNormal"
+        tools:layout_constraintRight_creator="1"
+        app:layout_constraintBottom_toBottomOf="@+id/include2"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginBottom="32dp" />
+</android.support.constraint.ConstraintLayout>

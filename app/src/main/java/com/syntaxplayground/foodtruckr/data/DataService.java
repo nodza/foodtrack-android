@@ -12,6 +12,7 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.syntaxplayground.foodtruckr.activities.AddFoodtruckActivity;
 import com.syntaxplayground.foodtruckr.activities.AddReviewActivity;
 import com.syntaxplayground.foodtruckr.activities.FoodtruckReviewsActivity;
 import com.syntaxplayground.foodtruckr.activities.FoodtrucksListActivity;
@@ -199,6 +200,85 @@ public class DataService {
             };
 
             Volley.newRequestQueue(context).add(reviewRequest);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    // Add foodtruck POST
+    public void addFoodtruck(String name, String foodType, Double avgCost, Double latitude, Double longitude, Context context, final AddFoodtruckActivity.AddFoodtruckInterface listener, String authToken) {
+
+        try {
+
+            String url = Constants.ADD_FOODTRUCK;
+
+            JSONObject geometry = new JSONObject();
+            JSONObject coordinates = new JSONObject();
+            coordinates.put("lat", latitude);
+            coordinates.put("lng", longitude);
+            geometry.put("coordinates", coordinates);
+
+            JSONObject jsonBody = new JSONObject();
+            jsonBody.put("name", name);
+            jsonBody.put("foodType", foodType);
+            jsonBody.put("avgCost", avgCost);
+            jsonBody.put("geometry", geometry);
+
+            final String mRequestBody = jsonBody.toString();
+            final String bearer = "Bearer " + authToken;
+
+            final JsonObjectRequest addFoodtruck = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        String message = response.getString("message");
+                        Log.i("JSON Message", message);
+
+                    } catch (JSONException e) {
+                        Log.v("JSON Message", "EXC: " + e.getLocalizedMessage());
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            }) {
+                @Override
+                public String getBodyContentType() {
+                    return "application/json; charset=utf-8";
+                }
+
+                @Override
+                public byte[] getBody() {
+                    try {
+                        return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
+                    } catch (UnsupportedEncodingException uee) {
+                        VolleyLog.wtf("Unsupported Encoding", mRequestBody, "utf-8");
+                        return null;
+                    }
+                }
+
+                @Override
+                protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
+                    if (response.statusCode == 200) {
+                        listener.success(true);
+                    }
+                    return super.parseNetworkResponse(response);
+                }
+
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> headers = new HashMap<>();
+                    headers.put("Authorization", bearer);
+
+                    return headers;
+                }
+            };
+
+            Volley.newRequestQueue(context).add(addFoodtruck);
 
         } catch (JSONException e) {
             e.printStackTrace();
